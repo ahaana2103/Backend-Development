@@ -26,28 +26,24 @@
 const users = require("../modules/userModules");
 
 const getUsers = (req, res) => {
-    const clientQuery = req.query;
-    console.log("~Client Query:", clientQuery);
-    res.json(users);
+   res.json(users);
 };
 
 const addUser = (req, res) => {
-    const newUser = req.body;
+   const { id, name } = req.body;
 
-    users.push(newUser);   // add new user to array
+   if (!id || !name) {
+      return res.status(400).json({
+         message: "User data missing"
+      });
+   }
 
-    res.json({
-        message: "User added successfully",
-        user: newUser
-    });
+   users.push({ id, name });
+
+   res.status(201).json({
+      message: "User created",
+      user: { id, name }
+   });
 };
 
-const getUserById = (req, res) => {
-    const userId = req.params.id;
-
-    const user = users.find((u) => u.id == userId);
-
-    res.json(user);
-};
-
-module.exports = { getUsers, addUser, getUserById };
+module.exports = { getUsers, addUser };

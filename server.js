@@ -1,6 +1,6 @@
-const express= require("express");
+// const express= require("express");
 
-const app= express();
+// const app= express();
 
 // app.get("/", (req,res) => {
 //     res.send("Server Setup done");
@@ -10,21 +10,27 @@ const app= express();
 // });
 // app.get("users/")
 
-const userRoutes =require("./routes/userRoutes");
+const express = require("express");
+const userRoutes = require("./routes/userRoutes");
+require("dotenv").config();
 
+const app = express();
 
-const customMiddleware = (req,res,next) =>{
-    if(req?.params?.uid){
-        return;
+app.use(express.json());
+
+const customMiddleware = (req, res, next) => {
+    if (req?.params?.uid) {
+        return next();
     }
+
     console.log("Middleware running");
     next();
-    
 };
-app.use(customMiddleware)
-app.use(express.json());
-app.use("/", userRoutes);
 
-app.listen(3000, () =>{
-    console.log("Server running at port 3000");
+app.use(customMiddleware);
+app.use("/", userRoutes);
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+    console.log(`Server running at port ${PORT}`);
 });
