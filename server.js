@@ -11,6 +11,18 @@ const app= express();
 // app.get("users/")
 
 const userRoutes =require("./routes/userRoutes");
+
+
+const customMiddleware = (req,res,next) =>{
+    if(req?.params?.uid){
+        return;
+    }
+    console.log("Middleware running");
+    next();
+    
+};
+app.use(customMiddleware)
+app.use(express.json());
 app.use("/", userRoutes);
 
 app.listen(3000, () =>{
