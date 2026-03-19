@@ -1,36 +1,23 @@
-// const express= require("express");
-
-// const app= express();
-
-// app.get("/", (req,res) => {
-//     res.send("Server Setup done");
-// });
-// app.get("/home", (req,res) =>{
-//     res.send("Home Page Done");
-// });
-// app.get("users/")
-
 const express = require("express");
-const userRoutes = require("./routes/userRoutes");
-require("dotenv").config();
+const userRoutes = require("./routes/userRoutes"); // your old routes
+const productRoutes = require("./routes/productRoutes"); // new ecommerce routes
 
 const app = express();
 
 app.use(express.json());
 
+// your middleware (optional)
 const customMiddleware = (req, res, next) => {
-    if (req?.params?.uid) {
-        return next();
-    }
-
     console.log("Middleware running");
     next();
 };
 
 app.use(customMiddleware);
-app.use("/", userRoutes);
-const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, () => {
-    console.log(`Server running at port ${PORT}`);
+// routes
+app.use("/", userRoutes);     // existing
+app.use("/", productRoutes);  // new
+
+app.listen(3000, () => {
+    console.log("Server running at port 3000");
 });
