@@ -1,9 +1,32 @@
 const express = require("express");
-const app = express();
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
+const app = express();
 app.use(express.json());
 
-// middleware
+// AUTH MIDDLEWARE
+
+const authMiddleware = (req, res, next) => {
+    const token = req.headers.authorization?.split(" ")[1];
+
+    if (!token) {
+        return res.send("Token not available");
+    }
+
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        console.log("Decoded:", decoded);
+
+        req.user = decoded;
+        next();
+    } catch (err) {
+        return res.send("Token not valid");
+    }
+};
+
+//app.use(authMiddleware);
+
 const customMiddleware = (req, res, next) => {
     console.log("Query:", req.query);
 
@@ -13,16 +36,18 @@ const customMiddleware = (req, res, next) => {
     return res.send("Not authorized");
 };
 
-// ONLY for /home
+// ONLY for /home route
 app.get("/home", customMiddleware, (req, res) => {
     res.send("Home Page");
 });
 
-// other routes (NO middleware here)
+// ROUTES
 const userRoutes = require("./routes/userRoutes");
 const productRoutes = require("./routes/productRoutes");
+const authRoutes = require("./routes/authRoutes");
 
 app.use("/", userRoutes);
 app.use("/", productRoutes);
+app.use("/", authRoutes);
 
 module.exports = app;

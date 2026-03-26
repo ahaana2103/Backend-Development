@@ -1,0 +1,16 @@
+### Home route (Not authorized)
+GET http://localhost:3000/home
+
+### Home route (Authorized using skip)
+GET http://localhost:3000/home?skip=true
+
+
+### Generate Token (Teacher-style GET request)
+GET http://localhost:3000/login?username=ram&email=ram@gmail.com
+
+
+### User Routes (example)
+GET http://localhost:3000/users
+
+### Product Routes (example)
+GET http://localhost:3000/products
