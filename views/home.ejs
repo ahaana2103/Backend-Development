@@ -1,5 +1,7 @@
-<h1>Welcome to <%= data.universityName%>
-</h1>
+<%- include("header" ,header)%>
+
+<%- include("content",content)%>
+<h1>Welcome to <%= data.universityName %> </h1>
 <h3>Computer Science Department </h3>
 <ol>
     <% data.studentList.forEach(student=> { %>
@@ -9,6 +11,6 @@
         <% }) %>
 </ol>
 
-<%- include("header" ,header)%>
 <%- include("footer" ,footer)%>
-<%- include("content",content)%>
+
+

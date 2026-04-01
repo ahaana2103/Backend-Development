@@ -63,6 +63,18 @@ const homePageContent = {
 app.get('/', (req, res) => {
     res.render("home", homePageContent);
 });
+// SEPARATE HEADER PAGE
+app.get("/header", (req, res) => {
+    res.render("header", homePageContent.header);
+});
+// SEPARATE CONTENT PAGE
+app.get("/content", (req, res) => {
+    res.render("content", homePageContent.content);
+});
+// SEPARATE FOOTER PAGE
+app.get("/footer", (req, res) => {
+    res.render("footer", homePageContent.footer);
+});
 
 // ROUTES
 // const userRoutes = require("./routes/userRoutes");
