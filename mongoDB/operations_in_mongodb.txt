@@ -1,0 +1,423 @@
+1. What is MongoDB (Simple Explanation)
+
+MongoDB is a NoSQL database (document-based).
+Instead of tables + rows → it stores data as JSON-like documents.
+
+One document = one object
+A collection = array of many documents
+
+Example:
+Your data is a perfect MongoDB collection.
+
+2. How to Insert This Data into MongoDB
+Step 1 — Install MongoDB
+
+(You can skip if already installed)
+
+Step 2 — Connect to Mongo Shell
+mongosh
+Step 3 — Create a Database
+use studentDB
+Step 4 — Create a Collection & Insert Data
+
+test> use studentDB
+switched to db studentDB
+studentDB> db.students.insertMany([
+|   {
+|     _id: 1,
+|     name: "Abhishek",
+|     age: 22,
+|     course: "B.Tech",
+|     skills: ["JavaScript", "React"],
+|     address: { city: "Delhi", pincode: 110001 },
+|     isActive: true
+|   },
+|   {
+|     _id: 2,
+|     name: "Priya",
+|     age: 24,
+|     course: "MBA",
+|     skills: ["Excel", "Finance"],
+|     address: { city: "Mumbai", pincode: 400001 },
+|     isActive: false
+|   },
+|   {
+|     _id: 3,
+|     name: "Rahul",
+|     age: 21,
+|     course: "BCA",
+|     skills: ["Python", "Flask"],
+|     address: { city: "Bangalore", pincode: 560001 },
+|     isActive: true
+|   },
+|   {
+|     _id: 4,
+|     name: "Sneha",
+|     age: 23,
+|     course: "B.Tech",
+|     skills: ["Java", "Spring"],
+|     address: { city: "Hyderabad", pincode: 500001 },
+|     isActive: true
+|   }
+| ])
+{ acknowledged: true, insertedIds: { '0': 1, '1': 2, '2': 3, '3': 4 } }
+
+3. How to Process / Query This Data
+A. Find all students
+
+studentDB> db.students.find()
+[
+  {
+    _id: 1,
+    name: 'Abhishek',
+    age: 22,
+    course: 'B.Tech',
+    skills: [ 'JavaScript', 'React' ],
+    address: { city: 'Delhi', pincode: 110001 },
+    isActive: true
+  },
+  {
+    _id: 2,
+    name: 'Priya',
+    age: 24,
+    course: 'MBA',
+    skills: [ 'Excel', 'Finance' ],
+    address: { city: 'Mumbai', pincode: 400001 },
+    isActive: false
+  },
+  {
+    _id: 3,
+    name: 'Rahul',
+    age: 21,
+    course: 'BCA',
+    skills: [ 'Python', 'Flask' ],
+    address: { city: 'Bangalore', pincode: 560001 },
+    isActive: true
+  },
+  {
+    _id: 4,
+    name: 'Sneha',
+    age: 23,
+    course: 'B.Tech',
+    skills: [ 'Java', 'Spring' ],
+    address: { city: 'Hyderabad', pincode: 500001 },
+    isActive: true
+  }
+]
+
+B. Find by _id
+
+studentDB> db.students.find({_id: 1})
+[
+  {
+    _id: 1,
+    name: 'Abhishek',
+    age: 22,
+    course: 'B.Tech',
+    skills: [ 'JavaScript', 'React' ],
+    address: { city: 'Delhi', pincode: 110001 },
+    isActive: true
+  }
+]
+
+C. Find by isActive
+
+studentDB> db.students.find({ isActive: true })
+[
+  {
+    _id: 1,
+    name: 'Abhishek',
+    age: 22,
+    course: 'B.Tech',
+    skills: [ 'JavaScript', 'React' ],
+    address: { city: 'Delhi', pincode: 110001 },
+    isActive: true
+  },
+  {
+    _id: 3,
+    name: 'Rahul',
+    age: 21,
+    course: 'BCA',
+    skills: [ 'Python', 'Flask' ],
+    address: { city: 'Bangalore', pincode: 560001 },
+    isActive: true
+  },
+  {
+    _id: 4,
+    name: 'Sneha',
+    age: 23,
+    course: 'B.Tech',
+    skills: [ 'Java', 'Spring' ],
+    address: { city: 'Hyderabad', pincode: 500001 },
+    isActive: true
+  }
+]
+
+studentDB> db.students.find({ isActive: false })
+[
+  {
+    _id: 2,
+    name: 'Priya',
+    age: 24,
+    course: 'MBA',
+    skills: [ 'Excel', 'Finance' ],
+    address: { city: 'Mumbai', pincode: 400001 },
+    isActive: false
+  }
+]
+
+D. Find students from a city
+
+studentDB> db.students.find({ "address.city": "Mumbai" })
+[
+  {
+    _id: 2,
+    name: 'Priya',
+    age: 24,
+    course: 'MBA',
+    skills: [ 'Excel', 'Finance' ],
+    address: { city: 'Mumbai', pincode: 400001 },
+    isActive: false
+  }
+]
+
+D. Find students from a skills
+
+studentDB> db.students.find({ skills: "React" })
+[
+  {
+    _id: 1,
+    name: 'Abhishek',
+    age: 22,
+    course: 'B.Tech',
+    skills: [ 'JavaScript', 'React' ],
+    address: { city: 'Delhi', pincode: 110001 },
+    isActive: true
+  }
+]
+
+
+F. Find students whose age > 22
+
+studentDB> db.students.find({ age: { $gt: 22 } })
+[
+  {
+    _id: 2,
+    name: 'Priya',
+    age: 24,
+    course: 'MBA',
+    skills: [ 'Excel', 'Finance' ],
+    address: { city: 'Mumbai', pincode: 400001 },
+    isActive: false
+  },
+  {
+    _id: 4,
+    name: 'Sneha',
+    age: 23,
+    course: 'B.Tech',
+    skills: [ 'Java', 'Spring' ],
+    address: { city: 'Hyderabad', pincode: 500001 },
+    isActive: true
+  }
+]
+studentDB> db.students.find({"isActive": {'$in':[true,false]}})
+[
+  {
+    _id: 1,
+    name: 'Abhishek',
+    age: 22,
+    course: 'B.Tech',
+    skills: [ 'JavaScript', 'React' ],
+    address: { city: 'Delhi', pincode: 110001 },
+    isActive: true
+  },
+  {
+    _id: 2,
+    name: 'Priya',
+    age: 24,
+    course: 'MBA',
+    skills: [ 'Excel', 'Finance' ],
+    address: { city: 'Mumbai', pincode: 400001 },
+    isActive: false
+  },
+  {
+    _id: 3,
+    name: 'Rahul',
+    age: 21,
+    course: 'BCA',
+    skills: [ 'Python', 'Flask' ],
+    address: { city: 'Bangalore', pincode: 560001 },
+    isActive: true
+  },
+  {
+    _id: 4,
+    name: 'Sneha',
+    age: 23,
+    course: 'B.Tech',
+    skills: [ 'Java', 'Spring' ],
+    address: { city: 'Hyderabad', pincode: 500001 },
+    isActive: true
+  }
+]
+
+G. Count students
+studentDB> db.students.countDocuments()
+4
+
+H. Project specific fields (only name & course)
+
+studentDB> db.students.find({}, { name: 1, course: 1 })
+[
+  { _id: 1, name: 'Abhishek', course: 'B.Tech' },
+  { _id: 2, name: 'Priya', course: 'MBA' },
+  { _id: 3, name: 'Rahul', course: 'BCA' },
+  { _id: 4, name: 'Sneha', course: 'B.Tech' }
+]
+studentDB> db.students.find({"isActive": {'$nin':[true,false]}})
+
+studentDB> db.students.find({"isActive": {'$nin':[false]}})
+[
+  {
+    _id: 1,
+    name: 'Abhishek',
+    age: 22,
+    course: 'B.Tech',
+    skills: [ 'JavaScript', 'React' ],
+    address: { city: 'Delhi', pincode: 110001 },
+    isActive: true
+  },
+  {
+    _id: 3,
+    name: 'Rahul',
+    age: 21,
+    course: 'BCA',
+    skills: [ 'Python', 'Flask' ],
+    address: { city: 'Bangalore', pincode: 560001 },
+    isActive: true
+  },
+  {
+    _id: 4,
+    name: 'Sneha',
+    age: 23,
+    course: 'B.Tech',
+    skills: [ 'Java', 'Spring' ],
+    address: { city: 'Hyderabad', pincode: 500001 },
+    isActive: true
+  }
+]
+
+I. Sort by age
+
+studentDB> db.students.find().sort({ age: 1 })  // Ascending
+[
+  {
+    _id: 3,
+    name: 'Rahul',
+    age: 21,
+    course: 'BCA',
+    skills: [ 'Python', 'Flask' ],
+    address: { city: 'Bangalore', pincode: 560001 },
+    isActive: true
+  },
+  {
+    _id: 1,
+    name: 'Abhishek',
+    age: 22,
+    course: 'B.Tech',
+    skills: [ 'JavaScript', 'React' ],
+    address: { city: 'Delhi', pincode: 110001 },
+    isActive: true
+  },
+  {
+    _id: 4,
+    name: 'Sneha',
+    age: 23,
+    course: 'B.Tech',
+    skills: [ 'Java', 'Spring' ],
+    address: { city: 'Hyderabad', pincode: 500001 },
+    isActive: true
+  },
+  {
+    _id: 2,
+    name: 'Priya',
+    age: 24,
+    course: 'MBA',
+    skills: [ 'Excel', 'Finance' ],
+    address: { city: 'Mumbai', pincode: 400001 },
+    isActive: false
+  }
+]
+
+J. Update students age and skills
+
+studentDB> db.students.updateOne(
+|   { _id: 1 },
+|   { $set: { age: 23 } }
+| )
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+studentDB> db.students.updateOne(
+|   { _id: 1 },
+|   { $push: { skills: "Node.js" } }
+| )
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+studentDB> db.students.find()
+[
+  {
+    _id: 1,
+    name: 'Abhishek',
+    age: 23,
+    course: 'B.Tech',
+    skills: [ 'JavaScript', 'React', 'Node.js' ],
+    address: { city: 'Delhi', pincode: 110001 },
+    isActive: true
+  },
+  {
+    _id: 2,
+    name: 'Priya',
+    age: 24,
+    course: 'MBA',
+    skills: [ 'Excel', 'Finance' ],
+    address: { city: 'Mumbai', pincode: 400001 },
+    isActive: false
+  },
+  {
+    _id: 3,
+    name: 'Rahul',
+    age: 21,
+    course: 'BCA',
+    skills: [ 'Python', 'Flask' ],
+    address: { city: 'Bangalore', pincode: 560001 },
+    isActive: true
+  },
+  {
+    _id: 4,
+    name: 'Sneha',
+    age: 23,
+    course: 'B.Tech',
+    skills: [ 'Java', 'Spring' ],
+    address: { city: 'Hyderabad', pincode: 500001 },
+    isActive: true
+  }
+]
+studentDB> db.students.updateMany({"isActive": {'$nin':[true]}} , {'$set':{"isActive" : true}})
+
+Add to set vs Push
+$push --- Always adds (pushes) the value into the array—even if the value already exists.
+
+studentDB> db.students.updateOne({_id: 4},{"$addToSet":{"skills":"Python"}})
+
+$addToSet-- Adds value only if it does NOT already exist→ Works like a Set (unique elements)
+
+studentDB> db.students.updateOne({_id: 4},{"$push":{"skills":"Python"}})
