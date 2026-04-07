@@ -1,0 +1,43 @@
+find student with certain detail (skills-- Python)
+
+db.students.find({$or: [{isActive: false},{skills: {$in: ["Python"] } }],});
+
+update/remove 
+
+db.students.updateOne({_id:4},{$pull:{skills: "Python"} });
+
+//add columns
+
+db.students.updateMany(
+  {},
+  {
+    $set: {
+      marks: [
+        { subject: "Machine Learning", score: 0 },
+        { subject: "Daa", score: 0 }
+      ]
+    }
+  }
+);
+
+// update marks
+
+db.students.updateMany(
+  {},
+  {
+    $set: {
+      "marks.$[elem].score": 100
+    }
+  },
+  {
+    arrayFilters: [
+      { "elem.subject": "Maths" }
+    ]
+  }
+);
+
+DELETE
+
+db.students.find({})
+db.students.deleteMany({})
+db.students.deleteOne({_id: 4})
