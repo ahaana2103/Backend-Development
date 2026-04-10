@@ -1,0 +1,11 @@
+### Create a new student
+
+POST http://localhost:3000/api/student
+Content-Type: application/json
+
+{
+  "_id": 11,
+  "name": "Riya" ,
+  "age" : 22,
+  "skills" : ["nodejs" ,"MongoDB"]
+}
