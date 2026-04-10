@@ -42,39 +42,42 @@
 // });
 
 //ejs 
-const express = require("express");
-const app = express();
+// const express = require("express");
+// const mdb= require("./modules/db");
+// mdb();
 
-app.set("view engine", "ejs");
+// const app = express();
 
-const homePageContent = {
-    header : { title: "GLA header" },
-    footer : { title: "GLA footer" },
-    content: { title: "Main content" },
-    data: {
-        universityName: "GLA University",
-        studentList: [
-            { name: "Student 1", dept: "CSE" },
-            { name: "Student 2", dept: "CSE" }
-        ],
-    },
-};
+// app.set("view engine", "ejs");
 
-app.get('/', (req, res) => {
-    res.render("home", homePageContent);
-});
-// SEPARATE HEADER PAGE
-app.get("/header", (req, res) => {
-    res.render("header", homePageContent.header);
-});
-// SEPARATE CONTENT PAGE
-app.get("/content", (req, res) => {
-    res.render("content", homePageContent.content);
-});
-// SEPARATE FOOTER PAGE
-app.get("/footer", (req, res) => {
-    res.render("footer", homePageContent.footer);
-});
+// const homePageContent = {
+//     header : { title: "GLA header" },
+//     footer : { title: "GLA footer" },
+//     content: { title: "Main content" },
+//     data: {
+//         universityName: "GLA University",
+//         studentList: [
+//             { name: "Student 1", dept: "CSE" },
+//             { name: "Student 2", dept: "CSE" }
+//         ],
+//     },
+// };
+
+// app.get('/', (req, res) => {
+//     res.render("home", homePageContent);
+// });
+// // SEPARATE HEADER PAGE
+// app.get("/header", (req, res) => {
+//     res.render("header", homePageContent.header);
+// });
+// // SEPARATE CONTENT PAGE
+// app.get("/content", (req, res) => {
+//     res.render("content", homePageContent.content);
+// });
+// // SEPARATE FOOTER PAGE
+// app.get("/footer", (req, res) => {
+//     res.render("footer", homePageContent.footer);
+// });
 
 // ROUTES
 // const userRoutes = require("./routes/userRoutes");
@@ -85,4 +88,15 @@ app.get("/footer", (req, res) => {
 // app.use("/", productRoutes);
 // app.use("/", authRoutes);
 
+const express = require("express");
+const mongoose = require("mongoose");
+const app = express();
+
+app.use(express.json());
+
+mongoose.connect("mongodb://localhost:27017/students")
+  .then(() => console.log("Connected to students DB"))
+  .catch(err => console.log(err));
+
+app.use("/api", require("./routes/userRoutes"));
 module.exports = app;
