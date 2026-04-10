@@ -1,12 +1,8 @@
 const express = require("express");
 const router = express.Router();
 
-const userController = require("../controller/userController");
-
-router.get("/users", userController.getUsers);
-router.post("/users", userController.addUser);
-
-//visible to end users
-router.route("/users").get(userController.getUsers).post(userController.addUser);
+const { addUser } = require("../controller/userController");
+// POST /users
+router.post("/student", addUser);
 
 module.exports = router;
